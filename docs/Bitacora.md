@@ -17,20 +17,24 @@ Cuando acabes no olvides ayudarnos evaluando tu ⭐[experiencia](https://forms.o
 ## Etapa 1: Preparación del Ambiente
 
 ### 1.1. Información de la aplicación
-
+dns juana-lozano-c-app.obs-stack.eci-idp.click
+{
+  "version": "1.0.0",
+  "message": "URL Shortener Service",
+  "status": "running"
+}
 ### 1.2. Verificación del despliegue
 
 **¿La aplicación se desplegó correctamente?** 
 
-- [ ] Sí
+- [x] Sí
 - [ ] No
 
 **Captura de pantalla de la aplicación funcionando:**
-
-> _[Inserta aquí la imagen de la aplicación corriendo en /api/]_
+![alt text](image.png)
 
 ### 1.3. Observaciones y problemas encontrados (opcional)
-
+NA
 ```
 
 
