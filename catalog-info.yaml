@@ -1,0 +1,20 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: "juana-lozano-c-app"
+  description: This is a Java Spring boot app with prometheus and loki integration
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    backstage.io/kubernetes-label-selector: 'entity-id=juana-lozano-c-app'
+    backstage.io/kubernetes-namespace: juana-lozano-c-app-monitoring
+    argocd/app-name: "juana-lozano-c-app"
+  links:
+    - url: https://juana-lozano-c-app.obs-stack.eci-idp.click/api/
+      title: Url Shortener App 
+      icon: externalLink
+spec:
+  owner: students
+  lifecycle: experimental
+  type: service
+  system: "system:default/obs-stack"
