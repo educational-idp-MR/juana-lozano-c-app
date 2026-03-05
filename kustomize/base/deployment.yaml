@@ -26,7 +26,7 @@ spec:
     spec:
       containers:
       - name: juana-lozano-c-app-monitoring
-        image: hello-world:latest #Workflows will update this image
+        image: 116981771521.dkr.ecr.us-east-1.amazonaws.com/juana-lozano-c-app:0.0.0
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
