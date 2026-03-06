@@ -278,28 +278,73 @@ Me gustaría visualizar analíticas de usuario más profundas, como la ubicació
 
 **1. Nombre de la métrica:**
 ```
-Ejemplo: url_shortener_urls_created_total
-
+url_shortener_shortcode_not_found_total
 ```
 
 **2. Tipo de métrica:**
-- [ ] Counter
+- [x] Counter
 - [ ] Gauge
 
 **3. ¿Qué comportamiento mide?**
 ```
-
-
-
+Cuenta el número de intentos de acceso a códigos cortos que no existen en el sistema.
+Cada vez que un usuario intenta redirigirse usando un código que no está registrado,
+la métrica incrementa en 1. Esto se detecta en el método getOriginalUrl() del servicio
+cuando la búsqueda retorna null.
 ```
 
 **4. ¿Por qué es relevante para el sistema?**
 ```
+• DETECCIÓN DE ANOMALÍAS: Un aumento inesperado de accesos fallidos puede indicar
+  intentos de ataque o bots probando códigos aleatorios.
 
+• EXPERIENCIA DEL USUARIO: Alerta sobre URLs que pueden haber sido eliminadas o 
+  compartidas incorrectamente, permitiendo mejorar la comunicación del servicio.
 
+• CALIDAD DE SERVICIO: Comparar la proporción de accesos exitosos vs fallidos es
+  un indicador clave de cuán efectivo es el servicio (tasa de error lógico).
 
+• PATRONES DE USO: Identifica qué códigos son más populares (menos fallidos) vs
+  cuáles generan más intentos de acceso inválido.
+
+• SEGURIDAD: Monitorear picos de 404s ayuda a detectar intentos de enumeración
+  o fuerza bruta sobre los códigos cortos.
 ```
 
+
+---
+
+### 2.2.3 Implementación de la Métrica en el Código
+
+**Ubicación del cambio:**
+`telemetry-lab/src/main/java/com/telemetry/urlshortener/service/UrlShortenerService.java`
+
+**Cambios realizados:**
+
+1. **Declaración del Counter** (Línea 26):
+```java
+private final Counter shortcodeNotFoundCounter;
+```
+
+2. **Registro en el constructor** (Líneas 33-35):
+```java
+this.shortcodeNotFoundCounter = Counter.builder("url_shortener_shortcode_not_found_total")
+        .description("Total number of attempts to access non-existent short codes")
+        .register(meterRegistry);
+```
+
+3. **Incremento en el método getOriginalUrl()** (Línea 80):
+```java
+if (mapping != null) {
+    logger.info("URL accessed - Code: {}", shortCode);
+} else {
+    logger.warn("Short code not found: {}", shortCode);
+    shortcodeNotFoundCounter.increment();  // ← AQUÍ se incrementa
+}
+```
+
+**Descripción:**
+El Counter se incrementa exactamente cuando un usuario intenta acceder a un código corto que no existe. Esto captura todos los intentos de redirección fallidos por código no encontrado.
 
 ---
 

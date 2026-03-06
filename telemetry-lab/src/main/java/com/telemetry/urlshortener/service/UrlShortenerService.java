@@ -23,11 +23,15 @@ public class UrlShortenerService {
     private final Random random = new Random();
 
     private final Counter dummyCounter;
+    private final Counter shortcodeNotFoundCounter;
 
     public UrlShortenerService(MeterRegistry meterRegistry) {
         logger.info("UrlShortenerService initialized with in-memory storage");
         this.dummyCounter = Counter.builder("dummyCounter")
                 .description("dummy description")
+                .register(meterRegistry);
+        this.shortcodeNotFoundCounter = Counter.builder("url_shortener_shortcode_not_found_total")
+                .description("Total number of attempts to access non-existent short codes")
                 .register(meterRegistry);
     }
 
@@ -74,6 +78,7 @@ public class UrlShortenerService {
             logger.info("URL accessed - Code: {}", shortCode);
         } else {
             logger.warn("Short code not found: {}", shortCode);
+            shortcodeNotFoundCounter.increment();
         }
         return Optional.ofNullable(mapping);
     }
